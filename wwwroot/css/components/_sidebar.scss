@@ -1,0 +1,30 @@
+@import 'variables';
+@import 'sidebar-logo';
+@import 'sidebar-menu';
+
+.sidebar-modern {
+  width: 88px;
+  min-height: 100vh;
+  background: $sidebar-bg;
+  border-radius: 0 24px 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0 0 0;
+  box-shadow: 2px 0 24px 0 rgba(0, 0, 0, 0.12);
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  overflow-y: auto;
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .sidebar-modern {
+    width: 56px;
+    padding: 8px 0 0 0;
+    border-radius: 0 16px 16px 0;
+  }
+}

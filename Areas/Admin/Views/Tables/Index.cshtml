@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Efood_Menu.Models.Table>
+@{
+    ViewData["Title"] = "Quản lý bàn ăn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="choose-dishes-title text-gradient mb-4 text-center">Quản lý bàn ăn</h1>
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+    <a asp-action="Create" class="btn efood-btn-add ms-2">
+        <i class="bi bi-plus-circle me-2"></i>
+        Thêm bàn mới
+    </a>
+</div>
+
+<div class="table-responsive mb-5">
+    <table class="table table-dark-admin efood-admin-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th>Số bàn</th>
+                <th>Sức chứa</th>
+                <th>Trạng thái</th>
+                <th class="text-center" style="width:160px;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.Id">
+                    <td>
+                        <span class="view-mode">@item.TableNumber</span>
+                        <input type="text" class="form-control form-control-sm edit-mode d-none" value="@item.TableNumber" name="TableNumber" />
+                    </td>
+                    <td>
+                        <span class="view-mode">@item.Capacity</span>
+                        <input type="number" class="form-control form-control-sm edit-mode d-none" value="@item.Capacity" name="Capacity" min="1" />
+                    </td>
+                    <td>
+                        <span class="view-mode">@(item.IsAvailable ? "Trống" : "Đã đặt")</span>
+                        <select class="form-select form-select-sm edit-mode d-none" name="IsAvailable">
+                            <option value="true" selected="@(item.IsAvailable ? "selected" : null)">Trống</option>
+                            <option value="false" selected="@(item.IsAvailable ? null : "selected")">Đã đặt</option>
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        <div class="view-mode">
+                            <button type="button" class="btn btn-info btn-sm btn-edit" title="Sửa"><i class="bi bi-pencil-square"></i></button>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" title="Xóa"><i class="bi bi-trash"></i></a>
+                        </div>
+                        <div class="edit-mode d-none">
+                            <button type="button" class="btn btn-accent btn-sm btn-save" title="Lưu"><i class="bi bi-check2"></i></button>
+                            <button type="button" class="btn btn-secondary btn-sm btn-cancel" title="Hủy"><i class="bi bi-x"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Bật chế độ chỉnh sửa
+            $('.btn-edit').on('click', function () {
+                var $row = $(this).closest('tr');
+                $row.find('.view-mode').addClass('d-none');
+                $row.find('.edit-mode').removeClass('d-none');
+            });
+
+            // Hủy chỉnh sửa
+            $('.btn-cancel').on('click', function () {
+                var $row = $(this).closest('tr');
+                $row.find('.edit-mode').addClass('d-none');
+                $row.find('.view-mode').removeClass('d-none');
+            });
+
+            // Lưu chỉnh sửa (AJAX)
+                    $('.btn-save').on('click', function () {
+            var $row = $(this).closest('tr');
+            var id = $row.data('id');
+            var data = {
+                Id: id,
+                TableNumber: $row.find('input[name="TableNumber"]').val(),
+                Capacity: $row.find('input[name="Capacity"]').val(),
+                IsAvailable: $row.find('select[name="IsAvailable"]').val() === "true",
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+            };
+            $.ajax({
+                url: '/Admin/Tables/Edit/' + id,
+                type: 'POST',
+                data: data,
+                success: function () {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert('Có lỗi xảy ra khi lưu! ' + xhr.responseText);
+                }
+            });
+        });
+        });
+    </script>
+}

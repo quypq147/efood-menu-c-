@@ -1,0 +1,209 @@
+﻿@using Efood_Menu.Models
+@model Order
+
+@{
+    var tables = ViewBag.Tables as List<Table>; // Or Model.Tables if you add it to the model
+}
+
+<form method="post">
+    <div class="checkout-wrapper row g-4">
+        <!-- Left: User Info -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4 efood-card">
+                <h3 class="mb-4 text-gradient fw-bold">Thông tin khách hàng</h3>
+                <div class="mb-3">
+                    <label asp-for="User.FullName" class="form-label">Họ tên</label>
+                    <input asp-for="User.FullName" class="form-control efood-input" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="User.PhoneNumber" class="form-label">Số điện thoại</label>
+                    <input asp-for="User.PhoneNumber" class="form-control efood-input" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Notes" class="form-label">Ghi chú</label>
+                    <textarea asp-for="Notes" class="form-control efood-input"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Order Type & Details -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4 efood-card">
+                <h3 class="mb-4 text-gradient fw-bold">Loại đơn hàng</h3>
+                <div class="order-type-group d-flex flex-column gap-3 mb-4">
+                    <div class="form-check d-flex align-items-center gap-2">
+                        <input class="form-check-input" type="radio" name="OrderType" id="dineIn" value="0">
+                        <label class="form-check-label d-flex align-items-center gap-2" for="dineIn">
+                            <img src="~/assets/icons/dinner.svg" alt="Ăn tại chỗ" width="28" height="28" />
+                            Ăn tại chỗ
+                        </label>
+                    </div>
+                    <div class="form-check d-flex align-items-center gap-2">
+                        <input class="form-check-input" type="radio" name="OrderType" id="takeAway" value="1">
+                        <label class="form-check-label d-flex align-items-center gap-2" for="takeAway">
+                            <img src="~/assets/icons/take-away.svg" alt="Mang đi" width="28" height="28" />
+                            Mang đi
+                        </label>
+                    </div>
+                    <div class="form-check d-flex align-items-center gap-2">
+                        <input class="form-check-input" type="radio" name="OrderType" id="delivery" value="2">
+                        <label class="form-check-label d-flex align-items-center gap-2" for="delivery">
+                            <img src="~/assets/icons/delivery-food.svg" alt="Giao hàng" width="28" height="28" />
+                            Giao hàng
+                        </label>
+                    </div>
+                </div>
+                @{
+                    var tables = ViewBag.Tables as List<Table>;
+                    if (tables == null)
+                    {
+                        <div style="color:red">Không có dữ liệu bàn! ViewBag.Tables bị null.</div>
+                    }
+                }
+                <div id="orderDetails" class="fade-in">
+                    <div class="mb-3" id="tableDiv" style="display:none;">
+                        <div class="mb-3" id="reservationFields" style="display:none;">
+                            <label class="form-label">Số lượng khách:</label>
+                            <input type="number" name="NumberOfGuests" class="form-control efood-input" min="1" max="50" />
+
+                            <label class="form-label mt-2">Thời gian đặt bàn:</label>
+                            <input type="datetime-local" name="ReservationDateTime" class="form-control efood-input" />
+                        </div>
+                        <label class="form-label d-flex align-items-center gap-2 mb-2">
+                            <img src="~/assets/icons/restaurant-table-and-chairs.svg" alt="Số bàn" width="22" height="22" />
+                            Chọn bàn:
+                        </label>
+                        <div class="table-matrix">
+                            @if (tables != null && tables.Any())
+                            {
+                                foreach (var table in tables)
+                                {
+                                    var available = table.IsAvailable;
+                                    <label class="table-radio @(available ? "table-available" : "table-unavailable")" title="Bàn @table.TableNumber @(available ? "(Trống)" : "(Đã đặt)")">
+                                        <input type="radio" name="TableNumber" value="@table.TableNumber" @(available ? "" : "disabled") autocomplete="off" />
+                                        <img src="~/assets/icons/restaurant-table-and-chairs.svg" alt="Bàn @table.TableNumber" width="32" height="32" />
+                                        <span class="table-label">@table.TableNumber</span>
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <span>Không có dữ liệu bàn.</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="mb-3" id="addressDiv" style="display:none;">
+                        <label class="form-label d-flex align-items-center gap-2">
+                            <img src="~/assets/icons/delivery-food.svg" alt="Địa chỉ giao hàng" width="22" height="22" />
+                            Địa chỉ giao hàng:
+                        </label>
+                        <input asp-for="ShippingAddress" class="form-control efood-input" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn efood-btn-add w-100 mt-3">Đặt hàng</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        // Hiện/ẩn form chi tiết theo loại đơn hàng
+        document.querySelectorAll('input[name="OrderType"]').forEach(el => {
+            el.addEventListener('change', function () {
+                document.getElementById('orderDetails').style.display = 'block';
+                if (this.value === "0") { // Ăn tại chỗ
+                    document.getElementById('tableDiv').style.display = 'block';
+                    document.getElementById('reservationFields').style.display = 'block';
+                    document.getElementById('addressDiv').style.display = 'none';
+                } else if (this.value === "2") { // Giao hàng
+                    document.getElementById('tableDiv').style.display = 'none';
+                    document.getElementById('reservationFields').style.display = 'none';
+                    document.getElementById('addressDiv').style.display = 'block';
+                } else { // Mang đi
+                    document.getElementById('tableDiv').style.display = 'none';
+                    document.getElementById('reservationFields').style.display = 'none';
+                    document.getElementById('addressDiv').style.display = 'none';
+                }
+            });
+        });
+
+        // Highlight selected table visually
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.table-radio input[type="radio"]').forEach(function (input) {
+                input.addEventListener('change', function () {
+                    document.querySelectorAll('.table-radio').forEach(function (cell) {
+                        cell.classList.remove('selected');
+                    });
+                    if (this.checked) {
+                        this.closest('.table-radio').classList.add('selected');
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+        .table-matrix {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .table-radio {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 80px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: box-shadow 0.2s, border 0.2s;
+            position: relative;
+            background: #f8f9fa;
+            font-weight: 500;
+            user-select: none;
+        }
+
+            .table-radio input[type="radio"] {
+                display: none;
+            }
+
+            .table-radio .table-label {
+                margin-top: 6px;
+                font-size: 1rem;
+            }
+
+        .table-available {
+            border-color: #81c784;
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .table-unavailable {
+            border-color: #e57373;
+            background: #ffebee;
+            color: #b71c1c;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .table-radio input[type="radio"]:checked + img,
+        .table-radio.selected img {
+            filter: drop-shadow(0 0 6px #1976d2);
+        }
+
+        .table-radio input[type="radio"]:checked ~ .table-label {
+            color: #1976d2;
+            font-weight: bold;
+        }
+
+        .table-radio input[type="radio"]:disabled + img {
+            filter: grayscale(1) opacity(0.5);
+        }
+    </style>
+}

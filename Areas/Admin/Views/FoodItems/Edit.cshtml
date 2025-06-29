@@ -1,0 +1,165 @@
+﻿@using System.Globalization
+@model Efood_Menu.Models.FoodItem
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Chỉnh sửa món ăn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var viVN = new CultureInfo("vi-VN");
+}
+
+<div class="efood-bg-section py-5 d-flex align-items-center justify-content-center" style="min-height:100vh;">
+    <div class="efood-create-card shadow animate__animated animate__fadeIn">
+        <div class="efood-accent-bar mb-3"></div>
+        <h1 class="mb-3 fw-bold text-center efood-title">
+            <i class="bi bi-pencil-square me-2 text-gradient"></i>Chỉnh sửa món ăn
+        </h1>
+        <form asp-action="Edit" enctype="multipart/form-data" autocomplete="off" id="edit-food-form" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" name="RemoveMainImage" id="RemoveMainImage" value="false" />
+            <input type="hidden" name="RemoveImageIds" id="RemoveImageIds" value="" />
+
+            <div class="efood-form-group mb-2">
+                <label asp-for="Name" class="efood-label form-label mb-1">
+                    <i class="bi bi-card-text me-1 small"></i> Tên món
+                </label>
+                <input asp-for="Name" class="efood-input form-control" placeholder="Nhập tên món ăn" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label asp-for="Description" class="efood-label form-label mb-1">
+                    <i class="bi bi-info-circle me-1 small"></i> Mô tả
+                </label>
+                <input asp-for="Description" class="efood-input form-control" placeholder="Mô tả ngắn" />
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label asp-for="Price" class="efood-label form-label mb-1">
+                    <i class="bi bi-cash-coin me-1 small"></i> Giá
+                </label>
+                <input asp-for="Price" class="efood-input form-control" placeholder="Giá món ăn" />
+                <span asp-validation-for="Price" class="text-danger small"></span>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label asp-for="CategoryId" class="efood-label form-label mb-1">
+                    <i class="bi bi-tags me-1 small"></i> Loại Món Ăn
+                </label>
+                <select asp-for="CategoryId" class="efood-input form-select" asp-items="ViewBag.CategoryId"></select>
+                <span asp-validation-for="CategoryId" class="text-danger small"></span>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label class="efood-label form-label mb-1">
+                    <i class="bi bi-image me-1 small"></i> Ảnh đại diện
+                </label>
+                <input type="file" name="ImageFile" class="efood-input form-control efood-file" accept="image/*" id="mainImageInput" />
+                <input asp-for="ImageUrl" class="efood-input form-control mt-2" placeholder="Hoặc dán link ảnh đại diện" />
+                <span asp-validation-for="ImageUrl" class="text-danger small"></span>
+                <div class="text-center mt-2" id="mainImageContainer">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img id="mainImagePreview" src="@Model.ImageUrl" alt="Ảnh đại diện" class="img-thumbnail" style="max-width:120px; border-radius:12px; box-shadow:0 2px 8px #ff967133;" />
+                        <button type="button" class="btn btn-sm btn-danger mt-2" id="removeMainImageBtn"><i class="bi bi-x"></i> Xóa ảnh</button>
+                    }
+                    else
+                    {
+                        <img id="mainImagePreview" src="" alt="Ảnh đại diện" class="img-thumbnail" style="max-width:120px; border-radius:12px; box-shadow:0 2px 8px #ff967133; display:none;" />
+                    }
+                </div>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label class="efood-label form-label mb-1">
+                    <i class="bi bi-images me-1 small"></i> Ảnh phụ
+                </label>
+                <input type="file" name="AdditionalImages" class="efood-input form-control efood-file" accept="image/*" multiple id="additionalImagesInput" />
+                <div class="d-flex flex-wrap gap-2 mt-2" id="additionalImagesPreview">
+                    @if (Model.Images != null)
+                    {
+                        foreach (var img in Model.Images)
+                        {
+                            <div class="position-relative d-inline-block" data-image-id="@img.Id">
+                                <img src="@img.ImageUrl" class="img-thumbnail" style="max-width:70px; border-radius:8px; box-shadow:0 2px 8px #ff967133;" />
+                                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-additional-image-btn" style="transform:translate(30%,-30%);" data-image-id="@img.Id">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mt-4">
+                <a asp-action="Index" class="efood-link d-inline-flex align-items-center">
+                    <i class="bi bi-arrow-left-short fs-5"></i> <span>Quay lại danh sách</span>
+                </a>
+                <button type="submit" class="efood-btn-add btn d-inline-flex align-items-center gap-2 shadow-sm">
+                    <i class="bi bi-save"></i> Lưu thay đổi
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+  <script>
+        // Xem trước ảnh đại diện
+        document.getElementById('mainImageInput').addEventListener('change', function (evt) {
+            const [file] = evt.target.files;
+            if (file) {
+                document.getElementById('mainImagePreview').src = URL.createObjectURL(file);
+                document.getElementById('mainImagePreview').style.display = '';
+                document.getElementById('RemoveMainImage').value = "false";
+            }
+        });
+
+        // Xóa ảnh đại diện
+        const removeMainImageBtn = document.getElementById('removeMainImageBtn');
+        if (removeMainImageBtn) {
+            removeMainImageBtn.addEventListener('click', function () {
+                document.getElementById('mainImagePreview').src = '';
+                document.getElementById('mainImagePreview').style.display = 'none';
+                document.getElementById('RemoveMainImage').value = "true";
+            });
+        }
+
+        // Xem trước ảnh phụ mới chọn
+        document.getElementById('additionalImagesInput').addEventListener('change', function (evt) {
+            const preview = document.getElementById('additionalImagesPreview');
+            // Giữ lại ảnh phụ cũ chưa bị xóa
+            const oldImages = Array.from(preview.querySelectorAll('.position-relative:not(.removed)'));
+            preview.innerHTML = '';
+            oldImages.forEach(imgDiv => preview.appendChild(imgDiv));
+            // Thêm ảnh mới chọn
+            Array.from(evt.target.files).forEach(file => {
+                const img = document.createElement('img');
+                img.className = 'img-thumbnail';
+                img.style.maxWidth = '70px';
+                img.style.borderRadius = '8px';
+                img.style.boxShadow = '0 2px 8px #ff967133';
+                img.src = URL.createObjectURL(file);
+                preview.appendChild(img);
+            });
+        });
+
+        // Xóa ảnh phụ cũ
+        document.querySelectorAll('.remove-additional-image-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const imageId = btn.getAttribute('data-image-id');
+                const container = btn.closest('.position-relative');
+                container.classList.add('removed');
+                container.style.display = 'none';
+                // Ghi lại id ảnh bị xóa vào hidden input
+                const removeInput = document.getElementById('RemoveImageIds');
+                let ids = removeInput.value ? removeInput.value.split(',') : [];
+                if (!ids.includes(imageId)) {
+                    ids.push(imageId);
+                    removeInput.value = ids.join(',');
+                }
+            });
+        });
+    </script>
+}

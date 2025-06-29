@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Efood_Menu.Models.FoodItem>
+
+@{
+    ViewData["Title"] = "Trang Chủ";
+    var featured = Model?.Take(4).ToList();
+}
+
+<!-- Navbar -->
+<nav class="efood-navbar navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="~/assets/icons/restaunrant.svg" alt="eFood Menu" style="height:38px;" class="me-2" />
+            <span class="fw-bold text-gradient fs-4">eFood Menu</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEfood" aria-controls="navbarEfood" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarEfood">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold" href="/">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold" href="/FoodItems">Thực đơn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold" href="/Categories">Danh mục</a>
+                </li>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="/Identity/Account/Login">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="/Identity/Account/Register">Đăng ký</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
+                            <button type="submit" class="nav-link btn btn-link fw-semibold text-danger px-0" style="text-decoration:none;">Đăng xuất</button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero-section position-relative d-flex flex-column justify-content-center align-items-center text-center">
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-content position-relative z-1">
+        <h1 class="hero-title mb-3">Chào mừng đến với <span class="text-gradient">eFood Menu!</span></h1>
+        <p class="hero-subtitle mb-4">Khám phá thực đơn đa dạng và đặt món ăn nhanh chóng.</p>
+        <div class="hero-buttons d-flex flex-wrap justify-content-center gap-3">
+            <a class="btn btn-accent" href="/FoodItems">Khám phá thực đơn</a>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a class="btn btn-outline-light" href="/Identity/Account/Login">Đăng nhập</a>
+                <a class="btn btn-outline-accent" href="/Identity/Account/Register">Đăng ký</a>
+            }
+            else if (User.IsInRole("Quản trị viên") || User.IsInRole("Nhân viên") || User.IsInRole("Chủ cửa hàng"))
+            {
+                <a class="btn btn-outline-light" href="/Admin">Quản lý Nhà hàng</a>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Section: Featured Dishes -->
+<section class="container my-5">
+    <h2 class="fw-bold text-gradient text-center mb-4">Món ăn nổi bật</h2>
+    <div class="row justify-content-center food-card-grid">
+        @if (featured != null && featured.Any())
+        {
+            foreach (var item in featured)
+            {
+                <div class="food-card">
+                    <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : item.ImageUrl)"
+                         alt="@item.Name"
+                         class="food-card__image" />
+                    <div class="food-card__title">@item.Name</div>
+                    <div class="food-card__price">@item.Price.ToString("c0", new System.Globalization.CultureInfo("vi-VN"))</div>
+                    <div class="food-card__order mt-2">
+                        <a href="/FoodItems/Details/@item.Id" class="btn btn-outline-accent btn-sm">Xem chi tiết</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center text-secondary">Chưa có món ăn nổi bật.</div>
+        }
+    </div>
+</section>
+
+<!-- Section: About -->
+<section class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <img src="/images/burger.png" alt="eFood Menu" class="img-fluid rounded-4 shadow" style="background:#232131;"/>
+        </div>
+        <div class="col-md-6">
+            <h3 class="fw-bold mb-3 text-gradient">Về eFood Menu</h3>
+            <p class="lead text-light">eFood Menu là nền tảng giúp bạn khám phá, đặt món ăn và quản lý thực đơn một cách dễ dàng, hiện đại và tiện lợi.</p>
+            <ul class="list-unstyled text-light">
+                <li><i class="bi bi-check-circle-fill text-accent me-2"></i> Giao diện hiện đại, thân thiện</li>
+                <li><i class="bi bi-check-circle-fill text-accent me-2"></i> Đặt món nhanh chóng</li>
+                <li><i class="bi bi-check-circle-fill text-accent me-2"></i> Quản lý danh mục, món ăn dễ dàng</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+

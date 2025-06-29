@@ -1,0 +1,82 @@
+.efood-card {
+  border-radius: 24px;
+  background: #232131;
+  color: #fff;
+  border: none;
+}
+.efood-gradient {
+  background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%) !important;
+  border-radius: 24px 24px 0 0;
+}
+.bg-efood-dark {
+  background: #232131;
+}
+.efood-table {
+  background: transparent;
+  th, td {
+    border-color: #39375b !important;
+    vertical-align: middle;
+    font-size: 1.08rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  thead tr {
+    background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%);
+  }
+  th {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-size: 1.1rem;
+  }
+  tbody tr.cart-row:hover {
+    background: #28263a;
+    transition: background 0.2s;
+  }
+}
+.efood-btn-gradient {
+  background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%);
+  color: #fff !important;
+  border: none;
+  transition: 0.2s;
+  &:hover {
+    background: linear-gradient(90deg, #ff6b6b 0%, #ff9671 100%);
+    color: #fff !important;
+    box-shadow: 0 2px 16px 0 #ff967155;
+  }
+}
+.efood-btn-outline {
+  border: 1.5px solid #ff9671;
+  color: #ff9671;
+  background: transparent;
+  border-radius: 8px;
+  transition: 0.2s;
+  &:hover {
+    background: #ff9671;
+    color: #fff;
+  }
+}
+.text-gradient {
+  background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.border-efood {
+  border-color: #ff9671 !important;
+}
+.efood-cart-wrapper {
+  background: #232131;
+  border-radius: 24px;
+  box-shadow: 0 4px 32px 0 #00000018;
+  color: #fff;
+  margin-bottom: 32px;
+}
+.cart-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #ff9671;
+  background: #232131;
+  transition: transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s;
+  box-shadow: 0 2px 8px 0 #ff967133;
+}

@@ -1,0 +1,179 @@
+﻿@page
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    
+    // Ví dụ: ViewBag.OrderCount, ViewBag.MerchantCount, ...
+}
+
+<h2 class="fw-bold mb-4 text-accent">Tổng quan hệ thống</h2>
+<div class="row g-4">
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card border-0 shadow dashboard-card h-100">
+            <div class="card-body text-center py-4">
+                <div class="dashboard-icon mb-3">
+                    <i class="bi bi-list-ul"></i>
+                </div>
+                <div class="dashboard-label mb-1">Đơn hàng</div>
+                <div class="dashboard-value">@ViewBag.OrderCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card border-0 shadow dashboard-card h-100">
+            <div class="card-body text-center py-4">
+                <div class="dashboard-icon mb-3">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div class="dashboard-label mb-1">Người dùng</div>
+                <div class="dashboard-value">@ViewBag.UserCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card border-0 shadow dashboard-card h-100">
+            <div class="card-body text-center py-4">
+                <div class="dashboard-icon mb-3">
+                    <i class="bi bi-egg-fried"></i>
+                </div>
+                <div class="dashboard-label mb-1">Món ăn</div>
+                <div class="dashboard-value">@ViewBag.FoodItemCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card border-0 shadow dashboard-card h-100">
+            <div class="card-body text-center py-4">
+                <div class="dashboard-icon mb-3">
+                    <i class="bi bi-tags"></i>
+                </div>
+                <div class="dashboard-label mb-1">Danh mục</div>
+                <div class="dashboard-value">@ViewBag.CategoryCount</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-5">
+    <!-- Bên trái: Doanh thu -->
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="card border-0 shadow dashboard-card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Tổng doanh thu</h5>
+                <div class="fs-2 fw-bold text-accent mb-3">
+                    @String.Format("{0:N0}₫", ViewBag.TotalRevenue ?? 0)
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var item in (IEnumerable<dynamic>)ViewBag.RevenueByOrderType ?? new List<dynamic>())
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>@item.OrderType</span>
+                            <span>@String.Format("{0:N0}₫", item.Revenue)</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Bên phải: Pie chart -->
+    <div class="col-md-6">
+        <div class="card border-0 shadow dashboard-card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Tỉ lệ doanh thu theo loại đơn hàng</h5>
+                <canvas id="orderTypePie" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .dashboard-card {
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, #232131 60%, #2d2b3a 100%);
+            box-shadow: 0 8px 32px rgba(255, 150, 113, 0.10), 0 2px 8px rgba(0,0,0,0.10);
+            transition: box-shadow 0.2s, transform 0.2s;
+            border: 1.5px solid #393C49;
+            position: relative;
+            overflow: hidden;
+        }
+        .dashboard-card:hover {
+            box-shadow: 0 12px 36px rgba(255, 150, 113, 0.18), 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-6px) scale(1.04);
+        }
+        .dashboard-icon {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(135deg, #FF9671 60%, #FF6B6B 100%);
+            border-radius: 18px;
+            color: #fff;
+            font-size: 2.7rem;
+            box-shadow: 0 2px 12px rgba(255, 150, 113, 0.18);
+            border: 2px solid #fff2;
+            transition: background 0.2s;
+        }
+        .dashboard-card:hover .dashboard-icon {
+            background: linear-gradient(135deg, #FF6B6B 60%, #FF9671 100%);
+        }
+        .dashboard-label {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #FFC75F;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        .dashboard-value {
+            font-size: 2.3rem;
+            font-weight: bold;
+            color: #FF9671;
+            text-shadow: 0 2px 8px #ff967133;
+            animation: popIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        @@keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        /* Pie chart card */
+        #orderTypePie {
+            max-width: 100%;
+            margin: 0 auto;
+            display: block;
+        }
+        @@media (max-width: 991.98px) {
+            .dashboard-card { border-radius: 1rem; }
+            .dashboard-icon { width: 48px; height: 48px; font-size: 1.7rem; }
+            .dashboard-value { font-size: 1.5rem; }
+        }
+    </style>
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var revenueByOrderType = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueByOrderType ?? new List<dynamic>()));
+
+        var ctx = document.getElementById('orderTypePie').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: revenueByOrderType.map(x => x.OrderType),
+                datasets: [{
+                    data: revenueByOrderType.map(x => x.Revenue),
+                    backgroundColor: [
+                        '#FF9671', '#FF6B6B', '#FFC75F', '#008F7A', '#845EC2', '#2C73D2'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+}

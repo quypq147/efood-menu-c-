@@ -1,0 +1,80 @@
+﻿@page
+@model Microsoft.AspNetCore.Mvc.RazorPages.PageModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Access Denied";
+}
+
+@section Styles {
+    <style>
+        .access-denied-wrapper {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #232131 60%, #FF9671 100%);
+        }
+
+        .access-denied-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 32px #ff967133;
+            padding: 48px 32px;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        .access-denied-icon {
+            font-size: 3.5rem;
+            color: #FF9671;
+            margin-bottom: 18px;
+        }
+
+        .access-denied-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #232131;
+            margin-bottom: 10px;
+        }
+
+        .access-denied-desc {
+            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+        }
+
+        .btn-back-home {
+            background: #FF9671;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 28px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.18s;
+        }
+
+            .btn-back-home:hover {
+                background: #ff7f50;
+                color: #fff;
+            }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+}
+
+<div class="access-denied-wrapper">
+    <div class="access-denied-card animate__animated animate__fadeInDown">
+        <div class="access-denied-icon">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+        <div class="access-denied-title">Từ chối truy cập</div>
+        <div class="access-denied-desc">
+            Bạn không có quyền truy cập vào tài nguyên này.<br />
+            Vui lòng kiểm tra quyền truy cập hoặc quay lại trang chủ.
+        </div>
+        <a href="/" class="btn btn-back-home">
+            <i class="bi bi-house-door-fill me-1"></i> Về trang chủ
+        </a>
+    </div>
+</div>

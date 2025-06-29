@@ -1,0 +1,144 @@
+﻿@model IEnumerable<Efood_Menu.Models.Category>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Quản lý danh mục";
+}
+
+<!-- AntiForgeryToken cho AJAX -->
+<form id="antiforgery-form" style="display:none;">@Html.AntiForgeryToken()</form>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-2">
+    <h2 class="fw-bold text-accent mb-0">Danh mục món ăn</h2>
+    <a asp-action="Create" class="btn btn-accent d-flex align-items-center gap-2 shadow-sm efood-btn-add">
+        <i class="bi bi-plus-circle fs-5"></i>
+        Thêm danh mục
+    </a>
+</div>
+
+<div class="card shadow-sm border-0 rounded-4 bg-dark-admin">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 efood-admin-table table-dark-admin">
+                <thead>
+                    <tr>
+                        <th class="text-start">Tên danh mục</th>
+                        <th class="text-center" style="width:160px;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr data-id="@item.Id">
+                            <td>
+                                <span class="view-mode">@item.Name</span>
+                                <input type="text" class="form-control form-control-sm edit-mode d-none" value="@item.Name" name="Name" />
+                            </td>
+                            <td class="text-center">
+                                <div class="view-mode">
+                                    <button type="button" class="btn btn-warning btn-sm btn-edit rounded-circle me-1" title="Sửa">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm rounded-circle" title="Xóa"
+                                       onclick="return confirm('Bạn có chắc muốn xóa danh mục này?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                                <div class="edit-mode d-none">
+                                    <button type="button" class="btn btn-accent btn-sm btn-save rounded-circle me-1" title="Lưu">
+                                        <i class="bi bi-check2"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm btn-cancel rounded-circle" title="Hủy">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .efood-admin-table th, .efood-admin-table td {
+            vertical-align: middle !important;
+        }
+        .efood-btn-add {
+            border-radius: 2rem;
+            font-weight: 500;
+            padding: 0.5rem 1.25rem;
+        }
+        .btn-warning {
+            background: #ffe082;
+            border: none;
+            color: #b26a00;
+        }
+        .btn-info {
+            background: #81d4fa;
+            border: none;
+            color: #01579b;
+        }
+        .btn-danger {
+            background: #ff8a80;
+            border: none;
+            color: #b71c1c;
+        }
+        .btn-warning:hover, .btn-info:hover, .btn-danger:hover {
+            filter: brightness(0.95);
+        }
+        .text-accent {
+            color: #FF9671 !important;
+        }
+        .card {
+            border-radius: 1.5rem !important;
+        }
+        @@media (max-width: 767.98px) {
+            .card { border-radius: 1rem !important; }
+            .efood-btn-add { width: 100%; justify-content: center; }
+        }
+    </style>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Bật chế độ chỉnh sửa
+            $('.btn-edit').on('click', function () {
+                var $row = $(this).closest('tr');
+                $row.find('.view-mode').addClass('d-none');
+                $row.find('.edit-mode').removeClass('d-none');
+            });
+
+            // Hủy chỉnh sửa
+            $('.btn-cancel').on('click', function () {
+                var $row = $(this).closest('tr');
+                $row.find('.edit-mode').addClass('d-none');
+                $row.find('.view-mode').removeClass('d-none');
+            });
+
+            // Lưu chỉnh sửa (AJAX)
+            $('.btn-save').on('click', function () {
+                var $row = $(this).closest('tr');
+                var id = $row.data('id');
+                var data = {
+                    Id: id,
+                    Name: $row.find('input[name="Name"]').val(),
+                    __RequestVerificationToken: $('#antiforgery-form input[name="__RequestVerificationToken"]').val()
+                };
+                $.ajax({
+                    url: '/Admin/Categories/Edit/' + id,
+                    type: 'POST',
+                    data: data,
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function (xhr) {
+                        alert('Có lỗi xảy ra khi lưu! ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}

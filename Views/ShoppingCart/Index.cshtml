@@ -1,0 +1,60 @@
+﻿@using Efood_Menu.Models
+@model ShoppingCart
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="efood-cart-wrapper p-4">
+                <h2 class="mb-4 fw-bold text-gradient text-center" style="font-size:2rem;">Giỏ hàng của bạn</h2>
+                @if (Model.Items != null && Model.Items.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table align-middle efood-table w-100">
+                            <thead>
+                                <tr>
+                                    <th class="text-white" style="min-width:200px;">Sản phẩm</th>
+                                    <th class="text-center text-white" style="width:90px;">Số lượng</th>
+                                    <th class="text-end text-white" style="width:110px;">Đơn giá</th>
+                                    <th class="text-end text-white" style="width:120px;">Thành tiền</th>
+                                    <th style="width:48px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr class="cart-row">
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="~/assets/images/products/@item.Image" alt="@item.Name" width="56" height="56" class="cart-img" />
+                                                <span class="fw-semibold" style="font-size:1.1rem;">@item.Name</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center fw-bold">@item.Quantity</td>
+                                        <td class="text-end fw-bold">@item.Price.ToString("N0") ₫</td>
+                                        <td class="text-end fw-bold">@((item.Price * item.Quantity).ToString("N0")) ₫</td>
+                                        <td>
+                                            <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId" class="btn btn-sm efood-btn-outline p-1" title="Xóa sản phẩm">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <a asp-action="Checkout" class="btn efood-btn-gradient btn-lg px-5 rounded-3 fw-bold d-flex align-items-center gap-2 shadow" style="font-size:1.15rem;">
+                            <i class="bi bi-bag-check"></i> Tới trang thanh toán
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info text-center mb-0 rounded-3">
+                        Giỏ hàng của bạn đang trống.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

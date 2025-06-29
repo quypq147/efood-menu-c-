@@ -1,0 +1,31 @@
+@import 'variables';
+
+.sidebar-logo {
+    margin-bottom: 32px;
+
+    .icon-box-bg {
+        background: $sidebar-logo-bg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        width: 56px;
+        height: 56px;
+        margin: 0 auto;
+
+        svg {
+            stroke: $sidebar-logo-icon-color;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .sidebar-logo {
+        margin-bottom: 16px;
+        .icon-box-bg {
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 12px !important;
+        }
+    }
+}

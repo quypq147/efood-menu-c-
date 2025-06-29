@@ -1,0 +1,27 @@
+// Thêm vào style.scss hoặc _checkout.scss
+.checkout-wrapper {
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 32px 0;
+  .card.efood-card {
+    border-radius: 18px;
+    background: #232131;
+    color: #fff;
+    border: none;
+  }
+  .order-type-group .form-check-input:checked + .form-check-label {
+    background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%);
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 12px;
+  }
+  .order-type-group .form-check-label img {
+    filter: drop-shadow(0 2px 8px rgba(255,107,107,0.10));
+  }
+  #orderDetails .form-label img {
+    vertical-align: middle;
+  }
+  .fade-in {
+    transition: all 0.3s;
+  }
+}

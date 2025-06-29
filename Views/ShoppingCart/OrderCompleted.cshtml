@@ -1,0 +1,41 @@
+﻿@model int
+@using Efood_Menu.Models
+@{
+    ViewData["Title"] = "Order Completed";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="alert alert-success text-center mb-4 shadow-sm">
+                <h2 class="mb-2 text-gradient"><i class="bi bi-check-circle-fill text-success me-2"></i>Đặt hàng thành công!</h2>
+                <p class="mb-0">Mã đơn hàng của bạn: <span class="fw-bold text-accent">#@Model</span></p>
+            </div>
+            <div class="text-center my-4">
+                <a class="btn btn-danger btn-lg px-4" href="@Url.Action("DownloadReceipt", "ShoppingCart", new { orderId = Model })">
+                    <i class="bi bi-file-earmark-pdf-fill me-2"></i> Tải Phiếu/In Phiếu (PDF)
+                </a>
+            </div>
+            <div class="text-center">
+                <a class="btn btn-primary mt-3 px-4" href="/FoodItems/Index">
+                    <i class="bi bi-arrow-left"></i> Quay lại thực đơn
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .text-accent {
+            color: #FF9671 !important;
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, #FF9671 0%, #FFC75F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+}

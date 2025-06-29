@@ -1,0 +1,43 @@
+﻿body {
+    background: #39394f !important;
+}
+.card {
+    border-radius: 18px !important;
+}
+.card-header {
+    border-radius: 18px 18px 0 0 !important;
+}
+.food-edit-bg {
+    background: #39394f !important;
+}
+.food-edit-card {
+    border-radius: 18px !important;
+    min-width: 380px;
+    max-width: 500px;
+}
+.food-edit-header {
+    background: linear-gradient(90deg, #ff7e5f 0%, #feb47b 100%);
+    color: #fff !important;
+    border-radius: 18px 18px 0 0 !important;
+    border: none;
+}
+.food-edit-thumb {
+    max-width: 120px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.btn-success {
+    background: #ff7e5f;
+    border: none;
+}
+.btn-success:hover, .btn-success:focus {
+    background: #feb47b;
+}
+.btn-outline-secondary {
+    color: #ff7e5f;
+    border-color: #ff7e5f;
+}
+.btn-outline-secondary:hover {
+    background: #ff7e5f;
+    color: #fff;
+}

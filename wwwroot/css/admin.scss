@@ -1,0 +1,226 @@
+@import 'components/_food_card.scss';
+@import 'components/_food_create.scss';
+@import 'components/_food_list.scss';
+@import 'components/_food_edit.scss';
+
+$accent: #FF9671;
+$accent-hover: #ff6b6b;
+$sidebar-bg: #232131;
+$sidebar-hover: #2d2b3a;
+$sidebar-width: 88px;
+$sidebar-width-collapsed: 56px;
+$sidebar-radius: 24px;
+$main-bg: #232131;
+$card-bg: #232131;
+$header-bg: #1F1D2B;
+$border: #393C49;
+$text-main: #fff;
+$text-muted: #dcdde1;
+
+body {
+  background: $main-bg;
+  color: $text-main;
+}
+
+.sidebar-modern {
+  width: $sidebar-width;
+  min-height: 100vh;
+  background: $sidebar-bg;
+  border-radius: 0 $sidebar-radius $sidebar-radius 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+  box-shadow: 2px 0 24px 0 rgba(0,0,0,0.12);
+  position: fixed;
+  left: 0; top: 0; bottom: 0; z-index: 10;
+  transition: width 0.2s;
+
+  .sidebar-logo {
+    margin-bottom: 2rem;
+    .icon-box-bg {
+      background: lighten($accent, 35%);
+      border-radius: 16px;
+      width: 56px; height: 56px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto;
+      svg { stroke: $accent; }
+    }
+    .logo-text {
+      display: block;
+      color: $accent;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  }
+
+  .sidebar-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    .side-menu-item {
+      width: 56px; height: 56px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 16px;
+      margin: 0 auto;
+      transition: background 0.2s, box-shadow 0.2s;
+
+      a {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        width: 100%; height: 100%;
+        border-radius: 16px;
+        color: $text-main;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        position: relative;
+
+        .icon-box {
+          font-size: 1.5rem;
+          margin-bottom: 0.25rem;
+        }
+        .menu-text {
+          color: $text-muted;
+          font-size: 0.95rem;
+          display: none;
+        }
+
+        &.active, &:hover {
+          background: $sidebar-hover;
+          color: $accent;
+        }
+      }
+    }
+  }
+
+  .sidebar-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 1rem;
+    .side-menu-item { margin-bottom: 0; }
+  }
+}
+
+// Main content
+.main-content {
+  margin-left: $sidebar-width;
+  min-height: 100vh;
+  background: $main-bg;
+  color: $text-main;
+  border-radius: 2rem 0 0 2rem;
+  box-shadow: 0 2px 12px #23213110;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.2s;
+}
+
+// Header
+.admin-header {
+  background: $header-bg;
+  color: $text-main;
+  border-bottom: 1px solid $border;
+  border-radius: 0 0 1.25rem 1.25rem;
+}
+
+// Card, Table, Form
+.card, .bg-dark-admin {
+  background: $card-bg !important;
+  color: $text-main !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 2px 12px #0002;
+}
+
+.table-dark-admin {
+  background: transparent;
+  color: $text-main;
+  thead th {
+    background: $header-bg;
+    color: $text-main;
+    border-bottom: 1px solid $border;
+  }
+  tbody tr {
+    background: $card-bg;
+    color: $text-main;
+    border-bottom: 1px solid $border;
+  }
+}
+
+.efood-admin-table th, .efood-admin-table td {
+  vertical-align: middle !important;
+}
+
+.form-control, .form-select {
+  background: $card-bg;
+  color: $text-main;
+  border: 1px solid $border;
+}
+.form-control:focus, .form-select:focus {
+  background: $card-bg;
+  color: $text-main;
+  border-color: $accent;
+  box-shadow: 0 0 0 0.2rem rgba(255,150,113,.15);
+}
+
+// Accent & Button
+.text-accent {
+  color: $accent !important;
+}
+.btn-accent {
+  background: $accent;
+  color: #fff;
+  border: none;
+}
+.btn-accent:hover {
+  background: $accent-hover;
+  color: #fff;
+}
+.efood-btn-add {
+  border-radius: 2rem;
+  font-weight: 500;
+  padding: 0.5rem 1.25rem;
+}
+
+.btn-warning {
+  background: #ffe082;
+  border: none;
+  color: #b26a00;
+}
+.btn-info {
+  background: #81d4fa;
+  border: none;
+  color: #01579b;
+}
+.btn-danger {
+  background: #ff8a80;
+  border: none;
+  color: #b71c1c;
+}
+.btn-warning:hover, .btn-info:hover, .btn-danger:hover {
+  filter: brightness(0.95);
+}
+
+// Responsive
+@media (max-width: 991.98px) {
+  .sidebar-modern {
+    width: $sidebar-width-collapsed;
+    border-radius: 0 16px 16px 0;
+    .sidebar-logo .logo-text { display: none; }
+    .sidebar-menu .side-menu-item a .menu-text { display: none; }
+  }
+  .main-content { margin-left: $sidebar-width-collapsed; border-radius: 0; }
+}
+@media (max-width: 767.98px) {
+  .card { border-radius: 1rem !important; }
+  .efood-btn-add { width: 100%; justify-content: center; }
+}

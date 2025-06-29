@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Efood_Menu.Models.FoodItem>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Menu Món Ăn";
+    var viVN = new CultureInfo("vi-VN");
+    var categories = ViewBag.Categories as IEnumerable<Efood_Menu.Models.Category>;
+    int? selectedCategory = null;
+    var catIdStr = Context.Request.Query["categoryId"].ToString();
+    if (int.TryParse(catIdStr, out var cid)) { selectedCategory = cid; }
+    string search = Context.Request.Query["search"];
+}
+
+<h1 class="choose-dishes-title text-gradient mb-4 text-center">Chọn món ăn</h1>
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+    <ul class="nav nav-tabs flex-grow-1">
+        <li class="nav-item">
+            <a class="nav-link @(selectedCategory == null ? "active" : "")"
+               href="@Url.Action("Index", new { categoryId = (int?)null })">
+                Tất cả
+            </a>
+        </li>
+        @if (categories != null)
+        {
+            foreach (var cat in categories)
+            {
+                <li class="nav-item">
+                    <a class="nav-link @(selectedCategory == cat.Id ? "active" : "")"
+                       href="@Url.Action("Index", new { categoryId = cat.Id })">
+                        @cat.Name
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+    <form method="get" class="d-flex ms-2" role="search" style="min-width:220px;">
+        <input type="hidden" name="categoryId" value="@(selectedCategory.HasValue? selectedCategory.Value.ToString() : "")" />
+        <input type="text" name="search" value="@search" class="form-control me-2" placeholder="Tìm món ăn..." />
+        <button type="submit" class="btn btn-outline-primary">Tìm</button>
+    </form>
+    
+</div>
+<!-- Card Grid đẹp, responsive -->
+<div class="food-card-grid">
+    @foreach (var item in Model)
+    {
+        <div class="food-card shadow-sm">
+            <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : item.ImageUrl)"
+                 alt="@item.Name"
+                 class="food-card__image" />
+            <div class="food-card__title">@item.Name</div>
+            <div class="food-card__price">@item.Price.ToString("c0", viVN)</div>
+            <div class="food-card__order mt-2">
+                <button type="button"
+                        class="btn btn-success w-100 add-to-cart-btn"
+                        data-product-id="@item.Id">
+                    <i class="bi bi-cart-plus me-1"></i> Đặt Món
+                </button>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    <script>
+        $(function() {
+            $('.food-card').click(function(e) {
+            // Nếu click vào nút đặt món thì không chuyển trang
+            if ($(e.target).closest('.add-to-cart-btn').length) return;
+            var id = $(this).find('.add-to-cart-btn').data('product-id');
+            window.location.href = '/FoodItems/Details/' + id;
+            });
+            $('.add-to-cart-btn').click(function() {
+                var btn = $(this);
+                var productId = btn.data('product-id');
+                $.ajax({
+                    url: '/ShoppingCart/AddToCart',
+                    type: 'POST',
+                    data: { productId: productId, quantity: 1 },
+                    success: function(response) {
+                        // Show confirmation
+                        $('<div class="alert alert-success cart-alert" style="position:fixed;top:80px;right:30px;z-index:9999;">Đã thêm vào giỏ!</div>')
+                            .appendTo('body')
+                            .delay(1200)
+                            .fadeOut(400, function() { $(this).remove(); });
+
+                        // Update cart badge (assume response returns cart count)
+                        if (response && response.cartCount !== undefined) {
+                            $('#cart-badge').text(response.cartCount).show();
+                        } else {
+                            // fallback: just show badge
+                            $('#cart-badge').show();
+                        }
+
+                        // Animate cart icon
+                        $('#cart-badge').addClass('animate__animated animate__tada');
+                        setTimeout(function() {
+                            $('#cart-badge').removeClass('animate__animated animate__tada');
+                        }, 800);
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- Optionally include Animate.css for better animation -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+}

@@ -1,0 +1,129 @@
+﻿
+
+.hero-section {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(120deg, #393C49 0%, #232131 100%);
+    overflow: hidden;
+}
+
+.hero-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: url('/images/bg-food-chalk.png') repeat center center, linear-gradient(120deg, #393C49cc 0%, #232131cc 100%);
+    opacity: 0.18;
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 60px 20px 40px 20px;
+    color: #fff;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    .text-gradient {
+        background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: #bfc3d4;
+    margin-bottom: 32px;
+    font-weight: 500;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+    margin-bottom: 10px;
+
+    .btn-accent {
+        background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%);
+        color: #fff !important;
+        font-weight: 600;
+        border: none;
+        border-radius: 14px;
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 16px rgba(255,107,107,0.10);
+        transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+        &:hover, &:focus {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ff9671 100%);
+            color: #fff !important;
+            box-shadow: 0 6px 24px rgba(255,107,107,0.18);
+            transform: translateY(-1px) scale(1.03);
+        }
+    }
+    .btn-outline-accent {
+        border: 2px solid #ff9671;
+        color: #ff9671 !important;
+        background: transparent;
+        font-weight: 600;
+        border-radius: 14px;
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        transition: background 0.18s, color 0.18s;
+        &:hover, &:focus {
+            background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%);
+            color: #fff !important;
+        }
+    }
+    .btn-outline-light {
+        border: 2px solid #fff;
+        color: #fff !important;
+        background: transparent;
+        font-weight: 600;
+        border-radius: 14px;
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        transition: background 0.18s, color 0.18s;
+        &:hover, &:focus {
+            background: #fff;
+            color: #ff9671 !important;
+        }
+    }
+}
+
+.efood-navbar {
+    background: #232131;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    .navbar-brand .text-gradient {
+        background: linear-gradient(90deg, #ff9671 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .nav-link {
+        color: #bfc3d4 !important;
+        font-weight: 500;
+        transition: color 0.18s;
+        &:hover, &.active {
+            color: #ff9671 !important;
+        }
+    }
+}
+
+.efood-footer {
+    background: #232131;
+    color: #bfc3d4;
+    border-top: 1px solid #393C49;
+    font-size: 1rem;
+    margin-top: 40px;
+}

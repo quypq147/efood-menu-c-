@@ -1,0 +1,75 @@
+﻿@model Efood_Menu.Models.FoodItem
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="efood-bg-section py-5 d-flex align-items-center justify-content-center" style="min-height:100vh;">
+    <div class="efood-create-card shadow animate__animated animate__fadeIn">
+        <div class="efood-accent-bar mb-3"></div>
+        <h1 class="mb-3 fw-bold text-center efood-title">
+            <i class="bi bi-plus-circle-dotted me-2 text-gradient"></i>Thêm món ăn mới
+        </h1>
+        <form asp-action="Create" enctype="multipart/form-data" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small"></div>
+            <div class="efood-form-group mb-2">
+                <label asp-for="Name" class="efood-label form-label mb-1">
+                    <i class="bi bi-card-text me-1 small"></i> Tên món
+                </label>
+                <input asp-for="Name" class="efood-input form-control" placeholder="Nhập tên món ăn" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label asp-for="Description" class="efood-label form-label mb-1">
+                    <i class="bi bi-info-circle me-1 small"></i> Mô tả
+                </label>
+                <input asp-for="Description" class="efood-input form-control" placeholder="Mô tả ngắn" />
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label asp-for="Price" class="efood-label form-label mb-1">
+                    <i class="bi bi-cash-coin me-1 small"></i> Giá
+                </label>
+                <input asp-for="Price" class="efood-input form-control" placeholder="Giá món ăn" />
+                <span asp-validation-for="Price" class="text-danger small"></span>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label class="efood-label form-label mb-1">
+                    <i class="bi bi-image me-1 small"></i> Ảnh Chính
+                </label>
+                <div class="custom-file-group">
+                    <input type="file" name="ImageFile" class="efood-input form-control efood-file" accept="image/*" />
+                </div>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label class="efood-label form-label mb-1">
+                    <i class="bi bi-images me-1 small"></i> Ảnh Phụ
+                </label>
+                <div class="custom-file-group">
+                    <input type="file" name="AdditionalImages" class="efood-input form-control efood-file" accept="image/*" multiple />
+                </div>
+            </div>
+            <div class="efood-form-group mb-2">
+                <label asp-for="CategoryId" class="efood-label form-label mb-1">
+                    <i class="bi bi-tags me-1 small"></i> Loại Món Ăn
+                </label>
+                <select asp-for="CategoryId" class="efood-input form-select" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mt-4">
+                <a asp-action="Index" class="efood-link d-inline-flex align-items-center">
+                    <i class="bi bi-arrow-left-short fs-5"></i> <span>Quay lại danh sách</span>
+                </a>
+                <button type="submit" class="efood-btn-add btn d-inline-flex align-items-center gap-2 shadow-sm">
+                    <i class="bi bi-plus-circle"></i> Thêm món mới
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

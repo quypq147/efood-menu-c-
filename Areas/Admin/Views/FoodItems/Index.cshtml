@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Efood_Menu.Models.FoodItem>
+
+@using System.Globalization
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Quản lý món ăn";
+    var viVN = new CultureInfo("vi-VN");
+    
+}
+
+<h1 class="choose-dishes-title text-gradient mb-4 text-center">Quản lý món ăn</h1>
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+    <div class="d-flex gap-2">
+        <a asp-area="Admin" asp-controller="Tables" asp-action="Index" class="btne food-btn-add ms-2 btn-outline-accent">
+            <i class="bi bi-table"></i> Quản lý bàn ăn
+        </a>
+    </div>
+    <a asp-area="Admin" asp-action="Create" class="btn efood-btn-add ms-2">
+        <i class="bi bi-plus-circle me-2"></i>
+        Thêm món mới
+    </a>
+</div>
+
+<!-- Danh sách món ăn dạng bảng đẹp cho efood menu -->
+<div class="table-responsive mb-5">
+    <table class="table efood-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th class="text-center" style="width:90px;">Ảnh</th>
+                <th class="text-start">Tên món</th>
+                <th class="text-end">Giá</th>
+                <th class="text-center">Danh mục</th>
+                <th class="text-center" style="width:160px;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">
+                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : item.ImageUrl)"
+                             alt="@item.Name"
+                             class="efood-table-img" style="max-width:64px;max-height:64px;" />
+                    </td>
+                    <td class="fw-semibold fs-5 text-light">@item.Name</td>
+                    <td class="text-end fs-5 text-light">@item.Price.ToString("c0", viVN)</td>
+                    <td class="text-center text-light">@item.Category?.Name</td>
+                    <td class="text-center">
+                        <a asp-area="Admin" asp-controller="FoodItems" asp-action="Edit" asp-route-id="@item.Id" class="efood-action-btn efood-action-edit" title="Sửa">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a asp-area="Admin" asp-controller="FoodItems" asp-action="Delete" asp-route-id="@item.Id" class="efood-action-btn efood-action-delete" title="Xóa">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

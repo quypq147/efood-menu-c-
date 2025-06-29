@@ -1,0 +1,11 @@
+.sidebar-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 16px;
+
+  .side-menu-item {
+    margin-bottom: 0;
+  }
+}
