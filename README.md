@@ -1,5 +1,6 @@
 
-# 📖 Efood-Menu Project Documentation / Tài liệu Dự án Efood-Menu
+[English](https://github.com/quypq147/efood-menu-c-/blob/main/README.md)     [Vietnamese](https://github.com/quypq147/efood-menu-c-/blob/main/README_vi.md)
+# 📖 Efood-Menu Project Documentation
 
 ## English
 
